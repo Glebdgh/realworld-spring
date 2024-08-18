@@ -5,6 +5,8 @@ metadata:
   labels:
     app: java-app
 spec:
+  strategy:
+    type: RollingUpdate
   replicas: 1
   selector:
     matchLabels:

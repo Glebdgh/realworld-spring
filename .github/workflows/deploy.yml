@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout code
@@ -42,31 +42,18 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/realworld-spring-app:${{ github.sha }}
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install kubectl
-      run: |
-        curl -LO "https://dl.k8s.io/release/v1.21.0/bin/linux/amd64/kubectl"
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/kubectl
 
     - name: Set up Kubeconfig and deploy files
       run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
-        export KUBECONFIG=~/.kube/config
+        export KUBECONFIG=${{ secrets.KUBE_CONFIG }}
         sed -i "s/ENV_TAG/${{ github.sha }}/g" k8s/deployment.yaml
         sed -i "s/repository/${{ secrets.DOCKER_USERNAME }}/g" k8s/deployment.yaml
-        
-#    - name: Apply Kubernetes manifests
-#      run: |
-#        kubectl apply -f k8s/
-
-#    - name: Check for applied manifests
-#      run: |
-#        kubectl get pods --all-namespaces
+        kubectl apply -f k8s/
+        kubectl get pods --all-namespaces
