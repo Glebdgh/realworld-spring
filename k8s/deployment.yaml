@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: java-app
-          image: gle88ka/realworld-spring-app:latest
+          image: repository/realworld-spring-app:ENV_TAG
           ports:
             - containerPort: 8080
