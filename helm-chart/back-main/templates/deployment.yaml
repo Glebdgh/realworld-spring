@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
         - name: java-app
-          image: repository/realworld-spring-app:ENV_TAG
+          image: {{ .Values.image }}
           ports:
             - containerPort: 8080
