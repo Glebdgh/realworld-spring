@@ -23,16 +23,8 @@ public class JwtSigner implements UserTokenProvider {
     public Jws<Claims> validate(String jwt) {
         try {
             return jwtParser.parseClaimsJws(jwt);
-        } catch (ExpiredJwtException e) {
-            throw new InvalidRequestException("Token has expired");
-        } catch (UnsupportedJwtException e) {
-            throw new InvalidRequestException("Unsupported JWT token");
-        } catch (MalformedJwtException e) {
-            throw new InvalidRequestException("Invalid JWT token");
-        } catch (SignatureException e) {
-            throw new InvalidRequestException("Invalid JWT signature");
-        } catch (IllegalArgumentException e) {
-            throw new InvalidRequestException("JWT claims string is empty");
+        } catch (JwtException | ClassCastException e) {
+            throw new InvalidRequestException("Token", "is invalid");
         }
     }
 
