@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import com.realworld.springmongo.exceptions.InvalidRequestException;
 
 import java.security.KeyPair;
 import java.util.Date;
