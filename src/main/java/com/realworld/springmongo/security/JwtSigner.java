@@ -5,7 +5,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import com.realworld.springmongo.exceptions.InvalidRequestException;
 
 import java.security.KeyPair;
 import java.util.Date;
@@ -21,11 +20,7 @@ public class JwtSigner implements UserTokenProvider {
     private final JwtProperties jwtProperties;
 
     public Jws<Claims> validate(String jwt) {
-        try {
-            return jwtParser.parseClaimsJws(jwt);
-        } catch (JwtException | ClassCastException e) {
-            throw new InvalidRequestException("Token", "is invalid");
-        }
+        return jwtParser.parseClaimsJws(jwt);
     }
 
     public String generateToken(String userId) {
@@ -34,9 +29,6 @@ public class JwtSigner implements UserTokenProvider {
                 .setSubject(userId)
                 .setExpiration(expirationDate())
                 .compact();
-    }
-    public boolean isTokenExpired(String token) {
-        return validate(token).getBody().getExpiration().before(new Date());
     }
 
     private Date expirationDate() {
