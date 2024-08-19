@@ -53,7 +53,7 @@ jobs:
     - name: Set up Kubeconfig and deploy files
       run: |
         export KUBECONFIG=${{ secrets.KUBE_CONFIG }}
-        sed -i '' 's/ENV_TAG/${{ github.sha }}/g' helm-chart/front-main/values.yaml
-        sed -i '' 's/repository/${{ secrets.DOCKER_USERNAME }}/g' helm-chart/front-main/values.yaml
+        sed -i '' 's/ENV_TAG/${{ github.sha }}/g' helm-chart/back-main/values.yaml
+        sed -i '' 's/repository/${{ secrets.DOCKER_USERNAME }}/g' helm-chart/back-main/values.yaml
         helm upgrade --install back-main ./helm-chart/back-main
         kubectl get pods --all-namespaces
