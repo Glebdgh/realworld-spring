@@ -1,2 +1,2 @@
-repository/realworld-spring-app:ENV_TAG
+image: repository/realworld-spring-app:ENV_TAG
 
