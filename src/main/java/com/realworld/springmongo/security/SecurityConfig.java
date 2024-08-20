@@ -1,4 +1,4 @@
-kpackage com.realworld.springmongo.security;
+package com.realworld.springmongo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
