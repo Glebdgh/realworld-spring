@@ -34,6 +34,7 @@ public class SecurityConfig {
     @Bean
     EndpointsSecurityConfig endpointsConfig() {
         return http -> http
+                .pathMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
                 .pathMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/articles/**").permitAll()
