@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenExtractor {
     public String extractToken(String authorizationHeader) {
-        if (!authorizationHeader.startsWith("Token ")) {
-            throw new InvalidRequestException("Authorization Header", "has no `Token` prefix");
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new InvalidRequestException("Authorization Header", "has no `Bearer` prefix");
         }
-        var tokenStarts = "Token ".length();
+        var tokenStarts = "Bearer ".length();
         return authorizationHeader.substring(tokenStarts);
     }
 }
