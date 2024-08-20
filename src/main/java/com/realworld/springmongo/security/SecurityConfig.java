@@ -34,11 +34,12 @@ public class SecurityConfig {
     @Bean
     EndpointsSecurityConfig endpointsConfig() {
         return http -> http
+                 
                 .pathMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/articles/**").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/tags/**").permitAll()
-                .anyRequest().authenticated();
+                .anyExchange().authenticated();
     }
 
     @FunctionalInterface
