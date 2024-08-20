@@ -49,6 +49,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set up Kubeconfig and deploy MongoDB
+      run: |
+        export KUBECONFIG=${{ secrets.KUBE_CONFIG }}
+        kubectl apply -f mongo_db/
 
     - name: Set up Kubeconfig and deploy files
       run: |
