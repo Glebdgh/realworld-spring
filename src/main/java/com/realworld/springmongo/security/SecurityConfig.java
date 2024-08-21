@@ -6,9 +6,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity.AuthorizeExchangeSpec;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -21,16 +25,27 @@ public class SecurityConfig {
                 .and()
                 .addFilterAt(webFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .httpBasic().disable()
-                .cors().disable()
+                .cors().configurationSource(corsConfigurationSource()) // Активуємо CORS
+                .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .logout().disable()
                 .build();
     }
 
-    /**
-     * Moving endpoints config to particular interface allow to change endpoints in tests.
-     */
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4100", "http://node-app-service.default.svc.cluster.local:4100"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     EndpointsSecurityConfig endpointsConfig() {
         return http -> http
@@ -43,7 +58,7 @@ public class SecurityConfig {
 
     @FunctionalInterface
     public interface EndpointsSecurityConfig {
-        AuthorizeExchangeSpec apply(AuthorizeExchangeSpec http);
+        ServerHttpSecurity.AuthorizeExchangeSpec apply(ServerHttpSecurity.AuthorizeExchangeSpec http);
     }
 }
 
